@@ -31,15 +31,15 @@ fun <T> Observable<String>.parseHook(clazz: Class<T>): Observable<T> {
         return@ObservableTransformer result.map {
             StringConverterFactory.gson.fromJson(it, clazz)
         }
-    }).globalCompose(clazz)
+    }).globalCompose()
 }
 
 /**
  * 一些全局操作
  */
-private fun <T> Observable<T>.globalCompose(clazz: Class<T>): Observable<T> {
+private fun <T> Observable<T>.globalCompose(): Observable<T> {
     return this.subscribeOn(Schedulers.io())
-        .handResult(clazz)
+        .handResult()
         .doOnError {
             check(!(BuildConfig.DEBUG && it !is ResultErrorException)) { "未处理异常" }
         }
@@ -48,7 +48,7 @@ private fun <T> Observable<T>.globalCompose(clazz: Class<T>): Observable<T> {
 /**
  * 统一处理异常情况
  */
-private fun <T> Observable<T>.handResult(clazz: Class<T>): Observable<T> {
+private fun <T> Observable<T>.handResult(): Observable<T> {
     return this.doOnNext {
         if (it is ServerStatusBean) {
             if (!it.isReqSuccess()) {
