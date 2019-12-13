@@ -19,3 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# 数据对象
+-keep interface com.common.httpencapsulation.bean.IApiBean {*;}
+-keep class * implements com.common.httpencapsulation.bean.IApiBean { *; }
+-keep class * extends com.common.httpencapsulation.bean.IApiBean { *; }
